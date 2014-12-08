@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Map API Example</title>
+    <script src="http//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+    <h3>Map API V.1.0</h3>
+    <h4>A javascript wrapper for using Google Maps API V3</h4>
+    <h5>Created By Ayyoub Jadoo</h5>
+    <button type="button" id="btnHideAll">Hide All</button>
+    <button type="button" id="btnShowAll">Show All</button>
+    <button type="button" id="btnDeleteAll">Delete All</button>
+    <button type="button" id="btnAddMarkers">Add Markers</button>
+    <button type="button" id="btnAddMark">Add Mark</button>
+    <button type="button" id="btnDeleteMark">Delete Mark</button>
+    Lat: <input id="txtSelLat" type="text" />
+    Lng: <input id="txtSelLng" type="text" />
+    <input id="txtAddress" type="text" placeholder="Location Address" />
+    <button type="button" id="btnGoLocation">Go</button>
+    <div class="map" id="map-canvas"></div>
+    <br /><br />
+    <div class="map" id="map-canvas2"></div>
+
+    <script src="../map-api-1.0.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var markers = [
+                new MapAPI.Point(31.95657830000000, 35.94569509999996, 'Shipment X', MapAPI.MarkerTypes.Start),
+                new MapAPI.Point(32.0000, 36.2000, 'Shipment X', MapAPI.MarkerTypes.End)
+            ];
+
+            var markers2 = [
+                new MapAPI.Point(32.23370000000000, 35.90190000000000, 'Shipment Y', MapAPI.MarkerTypes.Start),
+                new MapAPI.Point(32.31270000000000, 35.73990000000000, 'Shipment Y', MapAPI.MarkerTypes.End)
+            ];
+
+            var oMarker = new MapAPI.Point(32.23370000000000, 35.90190000000007, 'Shipment A', MapAPI.MarkerTypes.Other, 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+
+            var map = MapAPI.getMapInstance('map-canvas', function () {
+                map.addMarkers(markers);
+                map.addMarkers(markers2);
+
+                map.callbacks.click = function (point, event) {
+                    var r = prompt('Enter a title for the new marker:');
+                    if (r != null && r.length > 0) {
+                        point.Title = r;
+                        map.addMarker(point);
+                    }
+                };
+
+                map.callbacks.mouseMove = function (lat, lng) {
+                    $('#txtSelLat').val(lat);
+                    $('#txtSelLng').val(lng);
+                };
+
+                map.callbacks.rightClick = function (p) {
+                    alert('Right Click: ' + p.Latitude + ', ' + p.Longitude);
+                };
+
+                map.callbacks.markerClick = function (point, event) {
+                    var r = confirm('Are you sure you want to delete this marker?');
+                    if (r == true) {
+                        map.deleteMarker(point);
+                    }
+                };
+
+                $('#btnHideAll').off('click').on('click', function (e) {
+                    map.hideAllMarkers();
+                });
+
+                $('#btnShowAll').off('click').on('click', function (e) {
+                    map.showAllMarkers();
+                });
+
+                $('#btnDeleteAll').off('click').on('click', function (e) {
+                    map.deleteAllMarkers();
+                });
+
+                $('#btnAddMarkers').off('click').on('click', function (e) {
+                    map.addMarkers(markers);
+                });
+
+                $('#btnAddMark').off('click').on('click', function (e) {
+                    map.addMarker(oMarker);
+                });
+
+                $('#btnDeleteMark').off('click').on('click', function (e) {
+                    map.deleteSelectedMarker();
+                });
+
+                $('#btnGoLocation').off('click').on('click', function (e) {
+                    var locations = map.getLocations($('#txtAddress').val(), function (locations) {
+                        if (locations.length > 0) {
+                            map.bindLocation(locations[0]);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
