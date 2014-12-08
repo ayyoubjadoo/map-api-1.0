@@ -8,7 +8,7 @@ var MapAPI = (function () {
     var MapInstances = {};
     var Geocoder;
     var Defaults = {
-        CenterCoords: null,
+        CenterCoords: { lat:31.95657830000000, lng:35.94569509999996 }, //Amman - Jordan
         Zoom: 10,
         MarkerIcons: {
             Start: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
@@ -68,7 +68,6 @@ var MapAPI = (function () {
     };
 
     var onAPIsLoaded = function () {
-        Defaults.CenterCoords = new google.maps.LatLng(31.95657830000000, 35.94569509999996); //Amman - Jordan
         Geocoder = new google.maps.Geocoder();
         IsAPIReady = true;
     };
