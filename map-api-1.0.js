@@ -60,7 +60,7 @@ var MapAPI = (function () {
 
         var script = document.createElement('script');
         script.type = 'text/javascript';
-        script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyANRx7xFgrV7offu7_Q-0Nkk6417WmOd_U' +
+        script.src = 'https://maps.googleapis.com/maps/api/js?key=API_KEY' +
             '&callback=' + onLoaded;
 
         document.head.appendChild(style);
